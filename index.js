@@ -35,10 +35,38 @@ const player = new Fighter({
     x: 0,
     y: 0,
   },
-  color: "red",
   offset: {
     x: 0,
     y: 0,
+  },
+  imageSource: "./assets/Masaru/Idle.png",
+  framesMax: 8,
+  scale: 2.5,
+  offset: {
+    x: 215,
+    y: 156,
+  },
+  sprites: {
+    idle: {
+      imageSource: "./assets/Masaru/Idle.png",
+      framesMax: 8,
+    },
+    run: {
+      imageSource: "./assets/Masaru/Run.png",
+      framesMax: 8,
+    },
+    jump: {
+      imageSource: "./assets/Masaru/Jump.png",
+      framesMax: 2,
+    },
+    fall: {
+      imageSource: "./assets/Masaru/Fall.png",
+      framesMax: 2,
+    },
+    attack1: {
+      imageSource: "./assets/Masaru/Attack1.png",
+      framesMax: 6,
+    },
   },
 });
 
@@ -51,10 +79,38 @@ const enemy = new Fighter({
     x: 0,
     y: 0,
   },
-  color: "blue",
   offset: {
     x: -50,
     y: 0,
+  },
+  imageSource: "./assets/Renzo/Idle.png",
+  framesMax: 4,
+  scale: 2.5,
+  offset: {
+    x: 215,
+    y: 170,
+  },
+  sprites: {
+    idle: {
+      imageSource: "./assets/Renzo/Idle.png",
+      framesMax: 4,
+    },
+    run: {
+      imageSource: "./assets/Renzo/Run.png",
+      framesMax: 8,
+    },
+    jump: {
+      imageSource: "./assets/Renzo/Jump.png",
+      framesMax: 2,
+    },
+    fall: {
+      imageSource: "./assets/Renzo/Fall.png",
+      framesMax: 2,
+    },
+    attack1: {
+      imageSource: "./assets/Renzo/Attack1.png",
+      framesMax: 4,
+    },
   },
 });
 
@@ -94,15 +150,36 @@ function animate() {
   player.velocity.x = 0;
   if (keys.a.pressed && player.lastKey === "a") {
     player.velocity.x = -5;
+    player.switchSprite("run");
   } else if (keys.d.pressed && player.lastKey === "d") {
     player.velocity.x = 5;
+    player.switchSprite("run");
+  } else {
+    player.switchSprite("idle");
   }
+
+  if (player.velocity.y < 0) {
+    player.switchSprite("jump");
+  } else if (player.velocity.y > 0) {
+    player.switchSprite("fall");
+  }
+
   //EnemyMovement
   enemy.velocity.x = 0;
   if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
     enemy.velocity.x = -5;
+    enemy.switchSprite("run");
   } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
     enemy.velocity.x = 5;
+    enemy.switchSprite("run");
+  } else {
+    enemy.switchSprite("idle");
+  }
+
+  if (enemy.velocity.y < 0) {
+    enemy.switchSprite("jump");
+  } else if (enemy.velocity.y > 0) {
+    enemy.switchSprite("fall");
   }
 
   //Collision detecion (Player hits Enemy)
