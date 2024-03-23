@@ -132,6 +132,36 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 
+let winner = "TIE";
+function determineWinner({ player, enemy, timerId }) {
+  clearTimeout(timerId);
+  document.querySelector("#winner").style.display = "flex";
+  if (player.health === enemy.health) {
+    winner = "TIE";
+    document.querySelector("#winner").textContent = winner + "!";
+  } else if (player.health > enemy.health) {
+    winner = "PLAYER 1";
+    document.querySelector("#winner").textContent = winner + " HAS WON!";
+  } else if (player.health < enemy.health) {
+    winner = "PLAYER 2";
+    document.querySelector("#winner").textContent = winner + " HAS WON!";
+  }
+}
+
+let timer = 60;
+let timerId;
+function decreaseTimer() {
+  if (timer > 0) {
+    timerId = setTimeout(decreaseTimer, 1000);
+    timer -= 1;
+    document.querySelector("#timer").textContent = timer;
+  } else {
+    determineWinner({ player, enemy, timerId });
+  }
+}
+
+decreaseTimer();
+
 function animate() {
   window.requestAnimationFrame(animate);
   c.fillStyle = "black";
@@ -166,7 +196,7 @@ function animate() {
     enemy.health -= 20;
     document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
-  //Collision detecion (Player hits Enemy)
+  //Collision detecion (Enemy hits Player)
   if (
     rectangularCollision({
       rectangle1: enemy,
@@ -177,6 +207,9 @@ function animate() {
     enemy.isAttacking = false;
     player.health -= 20;
     document.querySelector("#playerHealth").style.width = player.health + "%";
+  }
+  if (player.health <= 0 || enemy.health <= 0) {
+    determineWinner({ player, enemy, timerId });
   }
 }
 
