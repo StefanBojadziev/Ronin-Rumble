@@ -84,6 +84,7 @@ const player = new Fighter({
     width: 150,
     height: 65,
   },
+  damage: 3,
 });
 
 const enemy = new Fighter({
@@ -128,7 +129,7 @@ const enemy = new Fighter({
       framesMax: 4,
     },
     takeHit: {
-      imageSource: "./assets/Renzo/Take hit.png",
+      imageSource: "./assets/Renzo/Take hit - white silhouette.png",
       framesMax: 3,
     },
     death: {
@@ -144,6 +145,7 @@ const enemy = new Fighter({
     width: 170,
     height: 50,
   },
+  damage: 2,
 });
 
 const keys = {
@@ -225,7 +227,7 @@ function animate() {
     player.isAttacking &&
     player.framesCurrent === 4
   ) {
-    enemy.takeHit();
+    enemy.takeHit(player.damage);
     player.isAttacking = false;
     //document.querySelector("#enemyHealth").style.width = enemy.health + "%";
     gsap.to("#enemyHealth", {
@@ -247,7 +249,7 @@ function animate() {
     enemy.isAttacking &&
     enemy.framesCurrent === 2
   ) {
-    player.takeHit();
+    player.takeHit(enemy.damage);
     enemy.isAttacking = false;
     //document.querySelector("#playerHealth").style.width = player.health + "%";
     gsap.to("#playerHealth", {
@@ -281,7 +283,9 @@ window.addEventListener("keydown", (event) => {
         player.lastKey = "a";
         break;
       case "w":
-        player.velocity.y = -20;
+        if (player.position.y === 331) {
+          player.velocity.y = -15;
+        }
         break;
       case " ":
         player.attack();
@@ -300,7 +304,9 @@ window.addEventListener("keydown", (event) => {
         enemy.lastKey = "ArrowLeft";
         break;
       case "ArrowUp":
-        enemy.velocity.y = -20;
+        if (enemy.position.y === 331) {
+          enemy.velocity.y = -15;
+        }
         break;
       case "0":
         enemy.attack();

@@ -66,6 +66,7 @@ class Fighter extends Sprite {
       width: undefined,
       height: undefined,
     },
+    damage,
   }) {
     super({
       position,
@@ -96,6 +97,7 @@ class Fighter extends Sprite {
     this.framesHold = 5;
     this.sprites = sprites;
     this.dead = false;
+    this.damage = damage;
 
     for (const sprite in this.sprites) {
       sprites[sprite].image = new Image();
@@ -139,8 +141,8 @@ class Fighter extends Sprite {
     this.isAttacking = true;
   }
 
-  takeHit() {
-    this.health -= 20;
+  takeHit(damage) {
+    this.health -= damage;
 
     //Death check
     if (this.health <= 0) {
